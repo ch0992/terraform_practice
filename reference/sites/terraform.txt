@@ -1,0 +1,106 @@
+
+1. Terraform 활용한 IaC 맛보기
+https://gooners0304.tistory.com/entry/Terraform%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-IaC-%EB%A7%9B%EB%B3%B4%EA%B8%B0
+
+
+2. Terraform  설치
+https://majjangjjang.tistory.com/164
+
+
+3. Terraform 으로 서비스 구축하기 
+
+0장 .테라폼이 무엇인가
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-01/
+
+1장 . 테라폼 설치하기
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-02/
+
+2장 . AWS 서비스 구축하기 2장. EC2 RDS S3 구축하기
+1)
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-03/
+2)
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-04/
+
+3장. 
+테라폼으로 AWS 서비스 구축하기 3장. 테라폼 더 잘쓰기 
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-05/
+
+테라폼으로 AWS 환경 구축하기 2장. ALB EC2 RDS S3-1 
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-06/
+
+테라폼으로 AWS 환경 구축하기 2장. ALB EC2 RDS S3-2
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-07/
+
+테라폼으로 AWS 환경 구축하기 4장. 모듈을 이용하여 코드 다시 쓰기
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-08/
+
+테라폼으로 AWS 환경 구축하기 4장. 모듈을 이용하여 코드 다시 쓰기-2
+https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-09/
+
+
+
+** Terraform을 활용하여 EKS 클러스터 구축하기
+https://may9noy.tistory.com/m/793
+
+GitOps 프로세스 섫계
+https://waspro.tistory.com/758
+
+테라폼 프로젝트 폴더 구조전략
+https://kim-dragon.tistory.com/209?category=1029704
+
+테라폼 Locking과 Backup (S3, DynamoDB)
+https://kim-dragon.tistory.com/210?category=1029704
+
+테라폼에서 사용할 코드 케이스 정해보기
+https://kim-dragon.tistory.com/213?category=1029704
+
+AWS 리소스별로 레이아웃을 나누는 방법
+https://kim-dragon.tistory.com/236?category=1029704
+
+테라폼으로 Lambda 함수 생성하기
+https://kim-dragon.tistory.com/237?category=1029704
+
+테라폼으로 IAM Role 생성하여 EC2에 할당하기
+https://kim-dragon.tistory.com/239?category=1029704
+
+모듈에 있는 자원을 outputs으로 설정하는 방법
+https://kim-dragon.tistory.com/241?category=1029704
+
+테라폼으로 AWS Elasticache Cluster 모드로 생성하기
+https://kim-dragon.tistory.com/243?category=1029704
+
+Terraformer로 기존 AWS 리소스 가져오기
+https://kim-dragon.tistory.com/244?category=1029704
+
+MAC M1 Incompatible provider version Error 해결(darwin_arm64)
+https://kim-dragon.tistory.com/247?category=1029704
+
+테라폼 사용전 알아두면 좋은 Best Practice 8가지
+https://kim-dragon.tistory.com/249?category=1029704
+
+AWS NLB internal private IP 할당 방법
+https://kim-dragon.tistory.com/250?category=1029704
+
+terraform init Error 해결
+https://kim-dragon.tistory.com/252?category=1029704
+
+slice 사용하여 리스트의 startindex, endindex 값 가져오기
+https://kim-dragon.tistory.com/261?category=1029704
+
+EKS CLuster 삭제시 aws-auth 에러 해결하기
+https://kim-dragon.tistory.com/262?category=1029704
+
+Terragrunt란?
+https://kim-dragon.tistory.com/263?category=1029704
+
+테라폼 Best practice 네이밍 편
+https://kim-dragon.tistory.com/264?category=1029704
+
+테라폼 특정 파일을 zip으로 변환하기 (Lambda 함수 배포)
+https://kim-dragon.tistory.com/266?category=1029704
+
+Autoscaling Group에 ELB 할당하기
+https://kim-dragon.tistory.com/267?category=1029704
+
+IAM user 생성 이후 Password 설정 하기
+https://kim-dragon.tistory.com/272?category=1029704

@@ -24,6 +24,7 @@ module "lb_controller_role" {
   role_path        = "/"
   role_description = "Used by AWS Load Balancer Controller for EKS"
 
+
   role_permissions_boundary_arn = ""
 
   provider_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")

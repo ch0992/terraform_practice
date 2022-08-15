@@ -39,6 +39,14 @@ https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-09/
 
 
 
+//Terraform으로 EKS 구축하기
+https://devblog.kakaostyle.com/ko/2022-03-31-3-build-eks-cluster-with-terraform/
+
+//EKS를 사용해서 어플리케이션 서비스 하기
+//https://devblog.kakaostyle.com/ko/2022-03-31-2-web-application-using-eks/
+
+
+
 ** Terraform을 활용하여 EKS 클러스터 구축하기
 https://may9noy.tistory.com/m/793
 

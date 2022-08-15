@@ -38,7 +38,7 @@ https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-08/
 https://dev.classmethod.jp/articles/build-multiple-services-with-terraform-09/
 
 
-
+Terraform으로 eks 생성 및 eks를 iam policy로 제어하기
 //Terraform으로 EKS 구축하기
 https://devblog.kakaostyle.com/ko/2022-03-31-3-build-eks-cluster-with-terraform/
 
@@ -46,6 +46,7 @@ https://devblog.kakaostyle.com/ko/2022-03-31-3-build-eks-cluster-with-terraform/
 //https://devblog.kakaostyle.com/ko/2022-03-31-2-web-application-using-eks/
 
 
+https://cjy-tech.github.io/terraform%EC%9C%BC%EB%A1%9C-EKS-%EC%83%9D%EC%84%B1-%EB%B0%8F-EKS%EB%A5%BC-IAM-policy%EB%A1%9C-%EC%A0%9C%EC%96%B4%ED%95%98%EA%B8%B0/
 
 ** Terraform을 활용하여 EKS 클러스터 구축하기
 https://may9noy.tistory.com/m/793

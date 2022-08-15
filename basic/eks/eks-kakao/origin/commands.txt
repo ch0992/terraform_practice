@@ -1,0 +1,139 @@
+
+### Architect ###
+https://devblog.kakaostyle.com/img/content/2022-03-31-2/2022-03-31-2-01.png
+
+
+1. kubeconfig 생성
+aws eks update-kubeconfig --region ap-northeast-2 --name simple-test --alias simple-test
+
+2. 쿠버네티스 클러스터 상태 조회
+kubectl get svc
+
+3. coredns 실행상태 확인
+kubectl get pods -n kube-system
+
+4. Fargate 노드만 실행하기 위해 Coredns 내용 수정
+kubectl patch deployment coredns \
+    -n kube-system \
+    --type json \
+    -p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]'
+
+5. Coredns 실행상태 재확인
+kubectl get pods -n kube-system
+
+6. 컨테이너에 IAM 권한 부여를 위한 ODIC 공급자 생성 
+eksctl utils associate-iam-oidc-provider --cluster simple-test --approve
+
+7. kunernetes application yaml 정의 후 생성
+** image를 ecr 레파지토리에 push 해줘야 한다.
+1) 이미지 pull
+docker pull arisu1000/simple-container-app:latest
+2) docker login
+aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 263443418578.dkr.ecr.ap-northeast-2.amazonaws.com
+3) docker tag 붙이기
+docker tag simple-container-app:latest {리파지토리 주소}.dkr.ecr.ap-northeast-2.amazonaws.com/simple-test:latest
+4) docker push
+docker push {리파지토리 주소}.dkr.ecr.ap-northeast-2.amazonaws.com/simple-test:latest
+
+kubectl apply -f simple-test.yaml
+
+8. application 실행상태 확인
+kubectl get pods -o wide
+
+9. 포트포워딩 셋팅 후 http request
+kubectl port-forward simple-test-{pods id} 3000:3000
+
+curl localhost:3000 --data 'hello world'
+
+===서비스 외부에 노출===
+
+10 ALB 컨트롤을 위한 정책 생성
+curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.0/docs/install/iam_policy.json
+
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy-simple-test \
+    --policy-document file://iam_policy.json
+
+11 위 정책을 포함한 IAM 역할 생성
+ACCOUNT_ID=$(aws sts get-caller-identity | jq -r .Account)
+OIDC_URL=$(aws eks describe-cluster --name simple-test --query "cluster.identity.oidc.issuer" --output text | sed "s|https://||")
+   
+cat > load-balancer-role-trust-policy.json << EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::${ACCOUNT_ID}:oidc-provider/$OIDC_URL"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "${OIDC_URL}:aud": "sts.amazonaws.com",
+                    "${OIDC_URL}:sub": "system:serviceaccount:kube-system:aws-load-balancer-controller"
+                }
+            }
+        }
+    ]
+}
+EOF
+
+aws iam create-role \
+    --role-name AmazonEKSLoadBalancerControllerRole-simple-test \
+    --assume-role-policy-document file://"load-balancer-role-trust-policy.json"
+
+aws iam attach-role-policy \
+    --policy-arn arn:aws:iam::${ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy-simple-test \
+    --role-name AmazonEKSLoadBalancerControllerRole-simple-test
+
+12 IAM 역할에 연결된 쿠버네티스 서비스 계정을 생성
+cat > aws-load-balancer-controller-service-account.yaml << EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::${ACCOUNT_ID}:role/AmazonEKSLoadBalancerControllerRole-simon-test
+EOF
+
+"vpc-0c6dedd5990b96a18"
+
+kubectl apply -f aws-load-balancer-controller-service-account.yaml
+
+13 AWS Load Balancer Controller를 설치
+
+VPC_ID=$(aws ec2 describe-vpcs --filters Name=cidr,Values=10.194.0.0/16 | jq -r .Vpcs[0].VpcId)
+
+helm repo add eks https://aws.github.io/eks-charts
+
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+    -n kube-system \
+    --set clusterName=simple-test \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    --set region=ap-northeast-2 \
+    --set vpcId=$VPC_ID \
+    --set image.repository=602401143452.dkr.ecr.ap-northeast-2.amazonaws.com/amazon/aws-load-balancer-controller
+
+helm install --replace aws-load-balancer-controller eks/aws-load-balancer-controller \
+-n kube-system \
+--set clusterName=simple-test \
+--set serviceAccount.create=false \
+--set serviceAccount.name=aws-load-balancer-controller \
+--set region=ap-northeast-2 \
+--set vpcId=$VPC_ID \
+--set image.repository=602401143452.dkr.ecr.ap-northeast-2.amazonaws.com/amazon/aws-load-balancer-controller
+
+
+kubectl get deployment -n kube-system aws-load-balancer-controller    
+
+14 로드밸런서 주소로 request
+LB_HOST=$(kubectl get ingress/simple-test-alb -ojson | jq -r .status.loadBalancer.ingress[0].hostname)
+curl $LB_HOST --data 'hello world'

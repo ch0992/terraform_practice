@@ -1,0 +1,12 @@
+1.coreDNS 패치
+
+aws eks update-kubeconfig --region ap-northeast-2 --name simon-test --alias simon-test
+
+kubectl patch deployment coredns -n kube-system --type json -p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]'
+
+
+2.Load Balancer로 요청보내기
+# k8s-default-alb-622014ceba-1089817135.ap-northeast-2.elb.amazonaws.com 같은 주소를 가집니다
+
+LB_HOST=$(kubectl get ingress/alb -ojson | jq -r ".status.loadBalancer.ingress[0].hostname")
+curl $LB_HOST
